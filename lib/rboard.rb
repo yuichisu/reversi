@@ -81,6 +81,7 @@ class Rboard
 
   def eval_set_piece(type, r, c)
     dir = @dir
+        corners = [[0, 0], [7, 0], [0, 7], [7, 7]]
     # dry run
     op = 1
     op = 2 if type == 1
@@ -101,7 +102,15 @@ class Rboard
             dir.each do |d|
               subt += check_dir(op, x, y, d[0], d[1])
             end
-            opcnt = [opcnt, subt].max
+            penalty=0
+            if subt > 0
+              corners.each do |item|
+                if x==item[0]&&y==item[1]
+                  penalty = 1000
+                end
+              end
+            end
+            opcnt = opcnt+penalty+subt
         end
       end
       @board = Marshal.load(buf)
@@ -167,8 +176,8 @@ class Rboard
 
   def search_max_pos3(type)
     corners = [[0, 0], [7, 0], [0, 7], [7, 7]]
-    #first = true
-    cnt = -100
+    first = true
+    cnt = -10000
     
     truecnt = 0
     br = 0
@@ -177,22 +186,24 @@ class Rboard
     8.times do |r|
       8.times do |c|
         ret = eval_set_piece(type, r, c)
-        cntbuf = -100.0
+        cntbuf = -10000.0
         if ret[0] > 0
-          #if first == true
-          #      br = r
-          #      bc = c
-          #      truecnt = dry_set_piece(type, br, bc)
-          #      first = false
-          #end
+          if first == true
+                br = r
+                bc = c
+                truecnt = dry_set_piece(type, br, bc)
+                first = false
+          end
           cntbuf=ret[0]-ret[1]
           corners.each do |item|
             dis = [(item[0] - r).abs, (item[1] - c).abs].max
             cntbuf = if dis == 0
-                       cntbuf = cntbuf + 2
+                       cntbuf = cntbuf + 500
                      elsif dis == 1
-                       cntbuf = cntbuf - 3
+                       cntbuf = cntbuf - 20
                      elsif dis == 2
+                       cntbuf = cntbuf + 4
+                     elsif r==0||c==0
                        cntbuf = cntbuf + 4
                      else
                        cntbuf 
