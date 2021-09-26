@@ -177,7 +177,7 @@ class Rboard
     8.times do |r|
       8.times do |c|
         ret = eval_set_piece(type, r, c)
-        cntbuf = -100
+        cntbuf = -100.0
         if ret[0] > 0
           #if first == true
           #      br = r
@@ -189,14 +189,15 @@ class Rboard
           corners.each do |item|
             dis = [(item[0] - r).abs, (item[1] - c).abs].max
             cntbuf = if dis == 0
-                       cntbuf = cntbuf + 4
+                       cntbuf = cntbuf + 2
                      elsif dis == 1
-                       cntbuf = cntbuf - 2
+                       cntbuf = cntbuf - 3
                      elsif dis == 2
-                       cntbuf = cntbuf + 1
+                       cntbuf = cntbuf + 4
                      else
                        cntbuf 
                      end
+                     
           end
         end
          #puts "#{r} #{c} #{cntbuf} #{cnt} #{truecnt} #{ret}"
