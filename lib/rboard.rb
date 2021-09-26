@@ -79,6 +79,38 @@ class Rboard
     cnt
   end
 
+  def eval_set_piece(type, r, c)
+    dir = @dir
+    # dry run
+    op = 1
+    op = 2 if type == 1
+    cnt = 0
+    opcnt = 0
+    dir.each do |d|
+      cnt += check_dir(type, r, c, d[0], d[1])
+
+      # puts "#{d} #{check_dir(type,r,c,d[0],d[1])}"
+    end
+    if cnt > 0
+      buf = Marshal.dump(@board)
+      set_piece(type, r, c)
+
+        8.times do |x|
+          8.times do |y|
+            subt=0
+            dir.each do |d|
+              subt += check_dir(op, x, y, d[0], d[1])
+            end
+            opcnt = [opcnt, subt].max
+        end
+      end
+      @board = Marshal.load(buf)
+
+    end
+    [cnt, opcnt]
+  end
+
+
   def search_max_pos(type)
     cnt = 0
     br = 0
@@ -116,7 +148,7 @@ class Rboard
                      elsif dis == 2
                        2
                      else
-                       cntbuf + rand(0...2)
+                       cntbuf 
                      end
           end
         end
@@ -128,6 +160,55 @@ class Rboard
         bc = c
         cnt = cntbuf
         truecnt = dry_set_piece(type, br, bc)
+      end
+    end
+    [truecnt, br, bc]
+  end
+
+  def search_max_pos3(type)
+    corners = [[0, 0], [7, 0], [0, 7], [7, 7]]
+    #first = true
+    cnt = -100
+    
+    truecnt = 0
+    br = 0
+    bc = 0
+    ret =[]
+    8.times do |r|
+      8.times do |c|
+        ret = eval_set_piece(type, r, c)
+        cntbuf = -100
+        if ret[0] > 0
+          #if first == true
+          #      br = r
+          #      bc = c
+          #      truecnt = dry_set_piece(type, br, bc)
+          #      first = false
+          #end
+          cntbuf=ret[0]-ret[1]
+          corners.each do |item|
+            dis = [(item[0] - r).abs, (item[1] - c).abs].max
+            cntbuf = if dis == 0
+                       cntbuf = cntbuf + 4
+                     elsif dis == 1
+                       cntbuf = cntbuf - 2
+                     elsif dis == 2
+                       cntbuf = cntbuf + 1
+                     else
+                       cntbuf 
+                     end
+          end
+        end
+         #puts "#{r} #{c} #{cntbuf} #{cnt} #{truecnt} #{ret}"
+        next unless cnt < cntbuf
+
+        if ret[0]>0
+         #puts "update"
+        br = r
+        bc = c
+        cnt = cntbuf
+        truecnt = dry_set_piece(type, br, bc)
+        end
       end
     end
     [truecnt, br, bc]

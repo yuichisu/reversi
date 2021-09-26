@@ -25,22 +25,22 @@ class SampleTest < Minitest::Test
 
   def test_set_piece
     b = Rboard.new
-    pp b.board
+    #pp b.board
     assert_equal 1, b.set_piece(1, 2, 3)
-    pp b.board
+    #pp b.board
     assert_equal 1, b.set_piece(2, 4, 2)
-    pp b.board
+    #pp b.board
     assert_equal 1, b.set_piece(1, 5, 2)
-    pp b.board
+    #pp b.board
     assert_equal 1, b.set_piece(2, 6, 2)
-    pp b.board
+    #pp b.board
     assert_equal 1, b.set_piece(1, 6, 1)
-    pp b.board
+    #pp b.board
   end
 
   def test_import_board
     b = Rboard.new
-    pp b.board
+    #pp b.board
     b.board = [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 1, 0, 0, 0, 0, 0, 0],
@@ -56,7 +56,7 @@ class SampleTest < Minitest::Test
 
   def test_search_board
     b = Rboard.new
-    pp b.board
+    #pp b.board
     b.board = [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 1, 0, 0, 0, 0, 0, 0],
@@ -71,7 +71,7 @@ class SampleTest < Minitest::Test
   end
   def test_search_board2
     b = Rboard.new
-    pp b.board
+    #pp b.board
     b.board = [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 1, 0, 0, 0, 0, 0, 0],
@@ -86,7 +86,7 @@ class SampleTest < Minitest::Test
   end
   def test_show
     b = Rboard.new
-    pp b.board
+    #pp b.board
     b.board = [
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 1, 0, 0, 0, 0, 0, 0],
@@ -107,4 +107,49 @@ class SampleTest < Minitest::Test
     assert_equal [true, 2, 0], b.parse_pos_inp("Aa3")
     assert_equal [true, 5, 7], b.parse_pos_inp("h6")
   end
+
+  def test_eval_set_piece
+    b = Rboard.new
+    puts "DDDDDDDDDDDDD"
+    a=[[0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 2, 1, 0, 0, 0],
+ [0, 0, 0, 1, 2, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0]]
+    pp b.board
+    10.times do
+      assert_equal [1,1], b.eval_set_piece(1, 2, 3)
+      assert_equal a, b.board
+    end 
+    b.board = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 2, 1, 2, 2, 0, 0, 0],
+      [0, 1, 1, 2, 2, 0, 0, 0],
+      [0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 1, 1, 0, 0, 0, 0, 0],
+      [0, 1, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    assert_equal [3,4], b.eval_set_piece(1, 2, 5)
+  end
+  def test_search_board3
+    b = Rboard.new
+    #pp b.board
+    b.board = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 1, 1, 2, 2, 0, 0, 0],
+      [0, 1, 1, 2, 2, 0, 0, 0],
+      [0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 1, 1, 0, 0, 0, 0, 0],
+      [0, 1, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    assert_equal [2, 0, 0], b.search_max_pos3(2)
+  end
+
 end

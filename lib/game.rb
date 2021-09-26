@@ -9,8 +9,8 @@ while step != 10
   case step
   when 1
     buf = [[], [], []]
-    buf[1] = r.search_max_pos(1)
-    buf[2] = r.search_max_pos2(2)
+    buf[1] = r.search_max_pos3(1)
+    buf[2] = r.search_max_pos3(2)
     step = if buf[1][0] == 0 && buf[2][0] == 0
              9
            else
