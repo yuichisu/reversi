@@ -199,8 +199,12 @@ class Rboard
             dis = [(item[0] - r).abs, (item[1] - c).abs].max
             cntbuf = if dis == 0
                        cntbuf = cntbuf + 500
-                     elsif dis == 1
-                       cntbuf = cntbuf - 20
+                     elsif dis == 1 && @board[item[0],item[1]]!=type
+                       if @board[item[0],item[1]]!=type
+                        cntbuf = cntbuf - 20
+                       else
+                         cntbuf = cntbuf + 200
+                       end
                      elsif dis == 2
                        cntbuf = cntbuf + 4
                      elsif r==0||c==0
