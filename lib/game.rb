@@ -28,17 +28,16 @@ while step != 10
       cnt = 0
       puts '== Your turn (X) =='
       while cnt == 0
-        print 'rc?'
-        y = gets.to_i
-        yc = y % 10
-        yr = (y - yc) / 10
-        # puts "#{y} #{yr} #{yc}"
-        if yr < 0 || yr > 7 || yc < 0 || yc > 7
+        print 'position?'
+        buf = r.parse_pos_inp(gets)
+        if buf[0]==false
+          puts "Invalid input"
         else
-          cnt = r.dry_set_piece(you, yr, yc)
+          cnt = r.dry_set_piece(you, buf[1], buf[2])
+          puts "You can't put your piece there." if cnt == 0
         end
       end
-      r.set_piece(cur, yr, yc)
+      r.set_piece(cur, buf[1], buf[2])
 
       puts
     end
@@ -55,11 +54,11 @@ while step != 10
     puts 'GAME SET'
     bn = r.num(1)
     wn = r.num(2)
-    puts "Black #{bn} White #{wn}"
+    puts "Black(X) #{bn} White(O) #{wn}"
     if bn > wn
-      puts 'Black Won!'
+      puts 'You Won!'
     elsif bn < wn
-      puts 'White won!'
+      puts 'PC Won!'
     else
       puts 'Even!'
     end

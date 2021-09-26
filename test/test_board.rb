@@ -18,23 +18,23 @@ class SampleTest < Minitest::Test
 
   def test_checkdir
     b = Rboard.new
-    assert_equal 1, b.check_dir(2, 2, 3, 1, 0)
-    assert_equal 0, b.check_dir(1, 2, 3, 1, 0)
-    assert_equal 1, b.check_dir(2, 3, 2, 0, 1)
+    assert_equal 0, b.check_dir(2, 2, 3, 1, 0)
+    assert_equal 1, b.check_dir(1, 2, 3, 1, 0)
+    assert_equal 1, b.check_dir(1, 3, 2, 0, 1)
   end
 
   def test_set_piece
     b = Rboard.new
     pp b.board
-    assert_equal 1, b.set_piece(2, 2, 3)
+    assert_equal 1, b.set_piece(1, 2, 3)
     pp b.board
-    assert_equal 1, b.set_piece(1, 4, 2)
+    assert_equal 1, b.set_piece(2, 4, 2)
     pp b.board
-    assert_equal 1, b.set_piece(2, 5, 2)
+    assert_equal 1, b.set_piece(1, 5, 2)
     pp b.board
-    assert_equal 1, b.set_piece(1, 6, 2)
+    assert_equal 1, b.set_piece(2, 6, 2)
     pp b.board
-    assert_equal 1, b.set_piece(2, 6, 1)
+    assert_equal 1, b.set_piece(1, 6, 1)
     pp b.board
   end
 
@@ -98,5 +98,13 @@ class SampleTest < Minitest::Test
       [0, 0, 0, 0, 0, 0, 0, 0]
     ]
     b.show
+  end
+  def test_parse_pos_inp
+    b = Rboard.new
+    assert_equal [false, 0, 0], b.parse_pos_inp("03")
+    assert_equal [false, 0, 0], b.parse_pos_inp("0x")
+    assert_equal [true, 2, 0], b.parse_pos_inp("3a")
+    assert_equal [true, 2, 0], b.parse_pos_inp("Aa3")
+    assert_equal [true, 5, 7], b.parse_pos_inp("h6")
   end
 end

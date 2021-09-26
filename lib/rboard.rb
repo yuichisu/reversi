@@ -110,7 +110,7 @@ class Rboard
           corners.each do |item|
             dis = [(item[0] - r).abs, (item[1] - c).abs].max
             cntbuf = if dis == 0
-                       4
+                       10
                      elsif dis == 1
                        0.5
                      elsif dis == 2
@@ -148,15 +148,15 @@ class Rboard
   end
 
   def show
-    puts '   c  '
-    puts '   0 1 2 3 4 5 6 7'
+    puts '     '
+    puts '   A B C D E F G H'
     8.times do |r|
       buf = if r == 0
-              'r'
+              ' '
             else
               ' '
             end
-      print "#{buf}#{r}"
+      print "#{buf}#{r+1}"
 
       8.times do |c|
         case @board[r][c]
@@ -171,4 +171,38 @@ class Rboard
       print "\n"
     end
   end
+
+  def parse_pos_inp(inp)
+    r=0
+    c=0
+    inp.chomp!
+    return [false, 0, 0] if inp.is_a?(String) == false
+    buf = inp.match(/([1-8])/)
+    return [false, 0,0] if buf == nil
+    r=(buf[0].to_i)-1
+    buf = inp.match(/([A-Ha-h])/)
+    return [false, 0,0] if buf == nil
+    
+    case buf[0].upcase
+    when "A"
+      c = 0
+    when "B"
+      c = 1
+    when "C"
+      c = 2
+    when "D"
+      c = 3
+    when "E"
+      c = 4
+    when "F"
+      c = 5
+    when "G"
+      c = 6
+    when "H"
+      c = 7
+    end
+    [true, r, c]
+  end
+
+
 end
